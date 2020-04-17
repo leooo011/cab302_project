@@ -6,7 +6,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+
 public class DBConnection {
+
     /**
      * The singleton instance of the database connection.
      */
@@ -15,37 +17,32 @@ public class DBConnection {
     /**
      * Constructor intializes the connection.
      */
-    private DBConnection()
-    {
-        Properties properties = new Properties();
-        try
-        {
-            //File input stream to load properties
-            FileInputStream fileInputStream = new  FileInputStream("./dp.props");
-            properties.load(fileInputStream);
-            fileInputStream.close();
+    private DBConnection() {
+        Properties props = new Properties();
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream("./db.props");
+            props.load(in);
+            in.close();
 
-            //Load data from source
-            String url = properties.getProperty("jdbc.url");
-            String username = properties.getProperty("jbdc.username");
-            String password = properties.getProperty("jbdc.password");
-            String schema = properties.getProperty("jbdc.schema");
+            // specify the data source, username and password
+            String url = props.getProperty("jdbc.url");
+            String username = props.getProperty("jdbc.username");
+            String password = props.getProperty("jdbc.password");
+            String schema = props.getProperty("jdbc.schema");
 
-            //Connect to db
-            instance = DriverManager.getConnection(url+"/"+schema,username,password);
-        }
-        catch (SQLException sqle)
-        {
+            // get a connection
+            instance = DriverManager.getConnection(url + "/" + schema,
+                    username, password);
+        } catch (SQLException sqle) {
             System.err.println(sqle);
-        }
-        catch (FileNotFoundException fnfe)
-        {
+        } catch (FileNotFoundException fnfe) {
             System.err.println(fnfe);
-        }catch (IOException ex)
-        {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
+
     /**
      * Provides global access to the singleton instance of the UrlSet.
      *
