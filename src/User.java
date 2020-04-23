@@ -11,7 +11,7 @@ public class User implements Serializable {
     private String hashedPassword;
     // hasdPassword2nd will save to db
     private String hashedPassword2nd;
-    private byte[] salt = new byte[16];
+    private static byte[] salt = new byte[16];
     private Boolean editUsers;
     private Boolean editAllBillboard;
     private Boolean createBillboard;
@@ -24,11 +24,6 @@ public class User implements Serializable {
         this.scheduleBillboard = scheduleBillboard;
         this.userName = userName;
         this.hashedPassword = hashedPassword;
-    }
-
-    public User()
-    {
-
     }
     public String getUserName(){
         return userName;
@@ -52,7 +47,7 @@ public class User implements Serializable {
     /*
      *Hash password using SHA-512 algorithm with random salt
      */
-    public String hashPassword(String hashedPassword)
+    public static String hashPassword(String hashedPassword)
     {
         SecureRandom random =new SecureRandom();
         random.nextBytes(salt);
@@ -72,7 +67,7 @@ public class User implements Serializable {
     /*
      *Hash password using SHA-512 algorithm with given salt
      */
-    public String hashPassword(String hashedPassword,byte[] salt)
+    public static String hashPassword(String hashedPassword, byte[] salt)
     {
         SecureRandom random =new SecureRandom();
         try
