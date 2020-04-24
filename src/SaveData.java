@@ -119,4 +119,21 @@ public  class SaveData {
         }
     }
 
+    /*
+     * Delete user in db by user name
+     */
+    public static void deleteUser(String userName){
+        Connection connection = DBConnection.getInstance();
+        String deleteUser = String.format("DELETE FROM users WHERE userName = '%s'",userName);
+        try
+        {
+            Statement st = connection.createStatement();
+            st.execute(deleteUser);
+
+            st.close();
+            connection.close();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
 }
