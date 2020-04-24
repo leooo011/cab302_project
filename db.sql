@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS `db`.`users`(
   `editAllBillboard` int,
   `createBillboard` int,
   `scheduleBillboard` int,
-  PRIMARY KEY(`accountName`)
+  PRIMARY KEY(`userName`)
 )ENGINE=MyISAM DEFAULT CHARSET=latin1;
