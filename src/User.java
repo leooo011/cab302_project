@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class User implements Serializable {
-    // real name of user
     private String userName;
     // hashedPassword will send through control panel
     private String hashedPassword;
