@@ -32,7 +32,7 @@ class TestDrivenBillboard {
      */
     @Test
     public void getBillboardProperties() {
-        File file = new File("src/Xml Examples/13.xml");
+        File file = new File("src/Xml Examples/12.xml");
         billboard.importXmlFile(file);
         Map<String, String> billboardProps = new HashMap<String, String>();
         billboardProps = billboard.billboardProps();
@@ -43,7 +43,7 @@ class TestDrivenBillboard {
      */
     @Test
     public void getMessageProperties() {
-        File file = new File("src/Xml Examples/13.xml");
+        File file = new File("src/Xml Examples/12.xml");
         billboard.importXmlFile(file);
         Map<String, String> messageProps = new HashMap<String, String>();
         messageProps = billboard.messageProps();
@@ -55,7 +55,7 @@ class TestDrivenBillboard {
      */
     @Test
     public void getInformationProperties() {
-        File file = new File("src/Xml Examples/13.xml");
+        File file = new File("src/Xml Examples/12.xml");
         billboard.importXmlFile(file);
         Map<String, String> informationProps = new HashMap<String, String>();
         informationProps = billboard.informationProps();
