@@ -7,15 +7,16 @@ import java.security.SecureRandom;
 public class User implements Serializable {
     private String userName;
     // hashedPassword will send through control panel
-    private String hashedPassword;
+    private String hashedPassword="";
     // hasdPassword2nd will save to db
-    private String hashedPassword2nd;
+    private String hashedPassword2nd="";
     private static byte[] salt = new byte[16];
     private Boolean editUsers;
     private Boolean editAllBillboard;
     private Boolean createBillboard;
     private Boolean scheduleBillboard;
 
+    //Create user from control panel
     public User(String userName,String hashedPassword, Boolean editUsers,Boolean editAllBillboard,Boolean createBillboard,Boolean scheduleBillboard) throws NoSuchAlgorithmException {
         this.editUsers = editUsers;
         this.editAllBillboard = editAllBillboard;
@@ -23,6 +24,16 @@ public class User implements Serializable {
         this.scheduleBillboard = scheduleBillboard;
         this.userName = userName;
         this.hashedPassword = hashedPassword;
+    }
+
+    //Create user from db
+    public User(String userName, Boolean editUsers,Boolean editAllBillboard,Boolean createBillboard,Boolean scheduleBillboard)
+    {
+        this.editUsers = editUsers;
+        this.editAllBillboard = editAllBillboard;
+        this.createBillboard = createBillboard;
+        this.scheduleBillboard = scheduleBillboard;
+        this.userName = userName;
     }
     public String getUserName(){
         return userName;
