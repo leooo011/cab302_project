@@ -34,8 +34,7 @@ class TestDrivenBillboard {
     public void getBillboardProperties() {
         File file = new File("src/Xml Examples/12.xml");
         billboard.importXmlFile(file);
-        Map<String, String> billboardProps = new HashMap<String, String>();
-        billboardProps = billboard.billboardProps();
+        Map<String, String> billboardProps = billboard.billboardProps();
         assertEquals("#555555", billboardProps.get("background"));
     }
 
@@ -45,8 +44,7 @@ class TestDrivenBillboard {
     public void getMessageProperties() {
         File file = new File("src/Xml Examples/12.xml");
         billboard.importXmlFile(file);
-        Map<String, String> messageProps = new HashMap<String, String>();
-        messageProps = billboard.messageProps();
+        Map<String, String> messageProps = billboard.messageProps();
         assertEquals("The information text is always smaller than the message text", messageProps.get("text"));
         assertEquals("#FFFFFF", messageProps.get("colour"));
     }
@@ -57,8 +55,7 @@ class TestDrivenBillboard {
     public void getInformationProperties() {
         File file = new File("src/Xml Examples/12.xml");
         billboard.importXmlFile(file);
-        Map<String, String> informationProps = new HashMap<String, String>();
-        informationProps = billboard.informationProps();
+        Map<String, String> informationProps = billboard.informationProps();
         assertEquals("The information text is always smaller than the message text", informationProps.get("text"));
         assertEquals("#DDDDDD", informationProps.get("colour"));
     }
@@ -69,8 +66,7 @@ class TestDrivenBillboard {
     public void getPictureProperties() {
         File file = new File("src/Xml Examples/4.xml");
         billboard.importXmlFile(file);
-        Map<String, String> pictureProps = new HashMap<String, String>();
-        pictureProps = billboard.pictureProps();
+        Map<String, String> pictureProps = billboard.pictureProps();
         assertEquals(null, pictureProps.get("url"));
         assertEquals("iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAKXRFWHRDcmVhdGlvbiBUaW1lAJCFIDI1IDMgMjAyMCAwOTowMjoxNyArMDkwMHlQ1XMAAAAHdElNRQfkAxkAAyQ8nibjAAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAAS5JREFUeNq1kb9KxEAQxmcgcGhhJ4cnFwP6CIIiPoZwD+ALXGFxj6BgYeU7BO4tToSDFHYWZxFipeksbMf5s26WnAkJki2+/c03OzPZDRJNYcgVwfsU42cmKi5YjS1s4p4DCrkBPc0wTlkdX6bsG4hZQOj3HRDLHqh08U4Adb/zgEMtq5RuH3Axd45PbftdB2wO5OsWc7pOYaOeOk63wYfdFtL5qldB34W094ZfJ+4RlFldTrmW/ZNbn2g0of1vLHdZq77qSDCaSAsLf9kXh9w44PNoR/YSPHycEmbIOs5QzBJsmDHrWLPeF24ZkCe6ZxDCOqHcmxmsr+hsicahss+n8vYb8NHZPTJxi/RGC5IqbRwqH6uxVTX+5LvHtvT/V/R6PGh/iF4GHoBAwz7RD26spwq6Amh/AAAAAElFTkSuQmCC", pictureProps.get("data"));
     }
