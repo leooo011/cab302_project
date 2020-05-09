@@ -70,7 +70,7 @@ class TestDrivenBillboard {
         File file = new File("./4.xml");
         billboard.importXmlFile(file);
         Map<String, String> pictureProps = new HashMap<String, String>();
-        pictureProps = billboard.pirctureProps();
+        pictureProps = billboard.pictureProps();
         assertEquals(null, pictureProps.get("url"));
         assertEquals("iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAKXRFWHRDcmVhdGlvbiBUaW1lAJCFIDI1IDMgMjAyMCAwOTowMjoxNyArMDkwMHlQ1XMAAAAHdElNRQfkAxkAAyQ8nibjAAAACXBIWXMAAAsSAAALEgHS3X78AAAABGdBTUEAALGPC/xhBQAAAS5JREFUeNq1kb9KxEAQxmcgcGhhJ4cnFwP6CIIiPoZwD+ALXGFxj6BgYeU7BO4tToSDFHYWZxFipeksbMf5s26WnAkJki2+/c03OzPZDRJNYcgVwfsU42cmKi5YjS1s4p4DCrkBPc0wTlkdX6bsG4hZQOj3HRDLHqh08U4Adb/zgEMtq5RuH3Axd45PbftdB2wO5OsWc7pOYaOeOk63wYfdFtL5qldB34W094ZfJ+4RlFldTrmW/ZNbn2g0of1vLHdZq77qSDCaSAsLf9kXh9w44PNoR/YSPHycEmbIOs5QzBJsmDHrWLPeF24ZkCe6ZxDCOqHcmxmsr+hsicahss+n8vYb8NHZPTJxi/RGC5IqbRwqH6uxVTX+5LvHtvT/V/R6PGh/iF4GHoBAwz7RD26spwq6Amh/AAAAAElFTkSuQmCC", pictureProps.get("data"));
     }
@@ -95,7 +95,7 @@ class TestDrivenBillboard {
     public void setProperties(){
         billboard.changeProperties("picture","url","https://cloudstor.aarnet.edu.au/plus/s/A26R8MYAplgjUhL/download");
         Map<String, String> pictureProps = new HashMap<String, String>();
-        pictureProps = billboard.pirctureProps();
+        pictureProps = billboard.pictureProps();
         assertEquals("https://cloudstor.aarnet.edu.au/plus/s/A26R8MYAplgjUhL/download", pictureProps.get("url"));
         assertEquals(null, pictureProps.get("data"));
 
