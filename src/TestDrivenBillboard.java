@@ -32,7 +32,7 @@ class TestDrivenBillboard {
      */
     @Test
     public void getBillboardProperties() {
-        File file = new File("./13.xml");
+        File file = new File("src/Xml Examples/13.xml");
         billboard.importXmlFile(file);
         Map<String, String> billboardProps = new HashMap<String, String>();
         billboardProps = billboard.billboardProps();
@@ -43,7 +43,7 @@ class TestDrivenBillboard {
      */
     @Test
     public void getMessageProperties() {
-        File file = new File("./13.xml");
+        File file = new File("src/Xml Examples/13.xml");
         billboard.importXmlFile(file);
         Map<String, String> messageProps = new HashMap<String, String>();
         messageProps = billboard.messageProps();
@@ -55,7 +55,7 @@ class TestDrivenBillboard {
      */
     @Test
     public void getInformationProperties() {
-        File file = new File("./13.xml");
+        File file = new File("src/Xml Examples/13.xml");
         billboard.importXmlFile(file);
         Map<String, String> informationProps = new HashMap<String, String>();
         informationProps = billboard.informationProps();
@@ -67,7 +67,7 @@ class TestDrivenBillboard {
      */
     @Test
     public void getPictureProperties() {
-        File file = new File("./4.xml");
+        File file = new File("src/Xml Examples/4.xml");
         billboard.importXmlFile(file);
         Map<String, String> pictureProps = new HashMap<String, String>();
         pictureProps = billboard.pictureProps();
@@ -92,6 +92,7 @@ class TestDrivenBillboard {
 
     /*Test 9: Set properties
      */
+    @Test
     public void setProperties(){
         billboard.changeProperties("picture","url","https://cloudstor.aarnet.edu.au/plus/s/A26R8MYAplgjUhL/download");
         Map<String, String> pictureProps = new HashMap<String, String>();
