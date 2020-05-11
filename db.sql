@@ -35,5 +35,7 @@ CREATE TABLE `db`.`schedule`(
   `userName` varchar(30) NOT NULL,
   `billboardName` varchar(30) NOT NULL,
   `time` time NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  `duration` time NOT NULL,
+  `recurTime` time NOT NULL
 );
