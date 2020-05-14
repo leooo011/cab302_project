@@ -37,5 +37,5 @@ CREATE TABLE `db`.`schedule`(
   `time` time NOT NULL,
   `date` date NOT NULL,
   `duration` time NOT NULL,
-  `recurTime` time NOT NULL
+  `recurTime` time
 );
