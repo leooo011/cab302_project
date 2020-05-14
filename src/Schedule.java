@@ -1,4 +1,3 @@
-import java.time.Duration;
 import java.util.Date;
 
 public class Schedule {
