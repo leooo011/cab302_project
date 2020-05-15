@@ -28,4 +28,10 @@ public class Schedule {
     public void setDuration(Date duration){this.duration = duration;
     }
     public void setRecurTime(Date recurTime){this.duration = recurTime;}
+    public String getAuthor(){
+        return user.getUserName();
+    }
+    public String getBillboardName(){
+        return billboard.getBillboardName();
+    }
 }
