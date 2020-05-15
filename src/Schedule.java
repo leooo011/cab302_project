@@ -15,9 +15,6 @@ public class Schedule {
         this.duration= duration;
         this.recurTime =recurTime;
     }
-
-    public Date getBillboardDate(){return date;}
-    public Date getBillboardTime(){return time;}
     public Date getDuration(){return duration;}
     public Date getRecurTime(){return recurTime;}
     public Date getDate(){return date;}
