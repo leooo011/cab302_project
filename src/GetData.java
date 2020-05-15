@@ -1,9 +1,45 @@
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
 
 public class GetData {
+    /*
+     * Get all users props
+     */
+    public static List<User> getAllUser(){
+        List<User> users = new ArrayList<User>();
+        Connection connection = DBConnection.getInstance();
+        String getAllUsersName = "SELECT userName from users";
+        try{
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(getAllUsersName);
+            while (rs.next()){
+                String userName = rs.getString(1);
+                users.add(getUser(userName));
+            }
+            st.close();
+            rs.close();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return users;
+    }
+
+    /*
+     * Get user by user name
+     */
+    public static User getUser(String userName){
+        Boolean editUsers = hasEditUsersPermission(userName);
+        Boolean editAllBillboard = hasEditAllBillboardPermission(userName);
+        Boolean scheduleBillboard = hasScheduleBillboardPermission(userName);
+        Boolean createBillboard = hasCreateBillPermission(userName);
+        User user = new User(userName,editUsers,editAllBillboard,createBillboard,scheduleBillboard);
+        return user;
+    }
+
     /*
      * Get hash password 2nd from db
      * Return null if cant connect to db
@@ -15,7 +51,7 @@ public class GetData {
         try{
             Statement st = connection.createStatement();
             ResultSet rs =  st.executeQuery(getUserHashedPassword2nd);
-            hashedPassword2nd =  rs.getString(0);
+            hashedPassword2nd =  rs.getString(1);
 
             st.close();
             rs.close();
@@ -38,7 +74,7 @@ public class GetData {
         try{
             Statement st = connection.createStatement();
             ResultSet rs =  st.executeQuery(getSalt);
-            salt =  rs.getString(0);
+            salt =  rs.getString(1);
 
             st.close();
             rs.close();
@@ -61,7 +97,11 @@ public class GetData {
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(getEditUsersPermission);
-            editUsersPermission = rs.getBoolean(0);
+            editUsersPermission = rs.getBoolean(1);
+
+            st.close();
+            rs.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -79,7 +119,11 @@ public class GetData {
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(getEditAllBillboardPermission);
-            editAllBillboardPermission = rs.getBoolean(0);
+            editAllBillboardPermission = rs.getBoolean(1);
+
+            st.close();
+            rs.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -97,7 +141,11 @@ public class GetData {
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(getCreateBillboardPermission);
-            editCreateBillboardPermission = rs.getBoolean(0);
+            editCreateBillboardPermission = rs.getBoolean(1);
+
+            st.close();
+            rs.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -115,7 +163,11 @@ public class GetData {
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(getScheduleBillboardPermission);
-            editScheduleBillboardPermission = rs.getBoolean(0);
+            editScheduleBillboardPermission = rs.getBoolean(1);
+
+            st.close();
+            rs.close();
+            connection.close();
         }catch (SQLException ex){
             ex.printStackTrace();
         }
