@@ -166,4 +166,32 @@ public class Billboard {
     private void setInfoColor(String newInfoColour){
         this.infoColor = newInfoColour;
     }
+
+    public String getBillboardBackground(){
+        return billboardBackground;
+    }
+
+    public String getMessageText(){
+        return messageText;
+    }
+
+    public String getMessageColour(){
+        return messageColour;
+    }
+
+    public String getInfoText(){
+        return infoText;
+    }
+
+    public String getInfoColor(){
+        return infoColor;
+    }
+
+    public String getPictureUrl(){
+        return pictureUrl;
+    }
+
+    public String getPictureData(){
+        return  pictureData;
+    }
 }
