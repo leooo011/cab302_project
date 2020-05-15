@@ -173,4 +173,107 @@ public class GetData {
         }
         return editScheduleBillboardPermission;
     }
+
+    /*
+     * Get list of billboard by user name
+     */
+    public static List<Billboard> getBillboardsByUserName(String userName) throws SQLException {
+        Connection connection = DBConnection.getInstance();
+        String getBillboard = String.format("SELECT * from billboard WHERE userName = '%s'",userName);
+        List<Billboard> billboards = new ArrayList<Billboard>();
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getBillboard);
+        while (rs.next()){
+            billboards.add(getBillboard(userName,rs.getString(2)));
+        }
+
+        st.close();
+        rs.close();
+        connection.close();
+        return billboards;
+    }
+
+    /*
+     * Get billboard props in db
+     */
+    public static Billboard getBillboard(String userName,String billboardName) throws SQLException {
+        String billboardBackground,messageText,messageColour,infoText,infoColor,pictureUrl, pictureData;
+        String getBillboardData = String.format("SELECT * from billboard WHERE userName = '%s' AND billboardName = '%s'",userName,billboardName);
+        Connection connection = DBConnection.getInstance();
+
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getBillboardData);
+        billboardBackground = rs.getString(3);
+        messageText = rs.getString(4);
+        messageColour = rs.getString(5);
+        infoText = rs.getString(6);
+        infoColor = rs.getString(7);
+        pictureUrl = rs.getString(8);
+        pictureData = rs.getBlob(9).toString();
+        Billboard billboard = new Billboard(userName,billboardName);
+        billboard.changeProperties("billboard","background",billboardBackground);
+        billboard.changeProperties("info","text",infoText);
+        billboard.changeProperties("info","colour",infoColor);
+        billboard.changeProperties("message","text",messageText);
+        billboard.changeProperties("message","colour",messageColour);
+        billboard.changeProperties("picture","url",pictureUrl);
+        billboard.changeProperties("picture","pictureData",pictureData);
+
+        st.close();
+        rs.close();
+        connection.close();
+        return billboard;
+    }
+
+    /*
+     * Get all billboard available in db
+     */
+    public static List<Billboard> getAllBillboards() throws SQLException {
+        Connection connection = DBConnection.getInstance();
+        String getBillboard = "SELECT * from billboard";
+        List<Billboard> billboards = new ArrayList<Billboard>();
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getBillboard);
+        String userName,billboardName;
+        while (rs.next()){
+            userName = rs.getString(1);
+            billboardName = rs.getString(2);
+            Billboard billboard = getBillboard(userName,billboardName);
+            billboards.add(billboard);
+        }
+        st.close();
+        rs.close();
+        connection.close();
+        return billboards;
+    }
+
+    /*
+     *Get suitable schedule of all billboard to display
+     */
+    public static ArrayList<Schedule> getSchedulesList() throws SQLException, ParseException {
+        ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+        Date date,time,duration,recurTime;
+        String userName, billboardName;
+        Connection connection = DBConnection.getInstance();
+        SimpleDateFormat dateFormatter = new  SimpleDateFormat("yyyy-mm-dd");
+        String getSuitableSchedule = String.format("SELECT* from schedule WHERE date = '%s'",dateFormatter.parse((new Date()).toString()),dateFormatter.parse(new Date().toString()));
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getSuitableSchedule);
+
+        while (rs.next()){
+            userName = rs.getString(1);
+            billboardName = rs.getString(2);
+            time = rs.getTime(3);
+            date = rs.getDate(4);
+            duration = rs.getDate(5);
+            recurTime = rs.getDate(6);
+            Schedule schedule = new Schedule(getUser(userName),getBillboard(userName,billboardName),date,time,recurTime,duration);
+            schedules.add(schedule);
+        }
+
+        st.close();
+        rs.close();
+        connection.close();
+        return schedules;
+    }
 }
