@@ -15,9 +15,9 @@ CREATE TABLE `db`.`users`(
   PRIMARY KEY(`userName`)
 )ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-DROP TABLE IF EXISTS `db`.`billboard`;
+DROP TABLE IF EXISTS `db`.`billboards`;
 
-CREATE TABLE `db`.`billboard`(
+CREATE TABLE `db`.`billboards`(
   `userName` varchar(30) NOT NULL,
   `billboardName` varchar(30) NOT NULL,
   `billboardBackground` varchar(10),
@@ -29,9 +29,9 @@ CREATE TABLE `db`.`billboard`(
   `pictureData` LONGBLOB
 );
 
-DROP TABLE IF EXISTS `db`.`schedule`;
+DROP TABLE IF EXISTS `db`.`schedules`;
 
-CREATE TABLE `db`.`schedule`(
+CREATE TABLE `db`.`schedules`(
   `userName` varchar(30) NOT NULL,
   `billboardName` varchar(30) NOT NULL,
   `time` time NOT NULL,
