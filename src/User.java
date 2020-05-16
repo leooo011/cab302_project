@@ -7,9 +7,9 @@ import java.security.SecureRandom;
 public class User implements Serializable {
     private String userName;
     // hashedPassword will send through control panel
-    private String hashedPassword="";
+    private String hashedPassword;
     // hasdPassword2nd will save to db
-    private String hashedPassword2nd="";
+    private String hashedPassword2nd;
     private static byte[] salt = new byte[16];
     private Boolean editUsers;
     private Boolean editAllBillboard;
@@ -40,8 +40,8 @@ public class User implements Serializable {
     }
     public String getHashedPassword(){return hashedPassword;}
     public String getHashedPassword2nd() {
-        return hashedPassword2nd.toString();
-    }
+        hashedPassword2nd = hashPassword(hashedPassword);
+        return hashedPassword2nd.toString(); }
     public String getSalt(){
         return salt.toString();
     }
@@ -55,7 +55,7 @@ public class User implements Serializable {
     }
 
     /*
-     *Hash password using SHA-512 algorithm with random salt
+     *Hash password using SHA-256 algorithm with random salt
      */
     public static String hashPassword(String hashedPassword)
     {
@@ -63,9 +63,14 @@ public class User implements Serializable {
         random.nextBytes(salt);
         try
         {
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(salt);
-            return md.digest(hashedPassword.getBytes(StandardCharsets.UTF_8)).toString();
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(salt.toString().getBytes());
+            byte[] hash = md.digest(hashedPassword.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for(byte b:hash){
+                sb.append(String.format("%2x",b&0xFF));
+            }
+            return sb.toString();
         }
         catch (NoSuchAlgorithmException ex)
         {
@@ -75,16 +80,20 @@ public class User implements Serializable {
     }
 
     /*
-     *Hash password using SHA-512 algorithm with given salt
+     *Hash password using SHA-256 algorithm with given salt
      */
     public static String hashPassword(String hashedPassword, byte[] salt)
     {
-        SecureRandom random =new SecureRandom();
         try
         {
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(salt);
-            return md.digest(hashedPassword.getBytes(StandardCharsets.UTF_8)).toString();
+            byte[] hash = md.digest(hashedPassword.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for(byte b:hash){
+                sb.append(String.format("%2x",b&0xFF));
+            }
+            return sb.toString();
         }
         catch (NoSuchAlgorithmException ex)
         {
