@@ -1,6 +1,3 @@
-import javafx.scene.chart.PieChart;
-
-import java.io.Console;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,51 +15,73 @@ import java.util.*;
 
 public class Server {
     private static String currentUserName;
+    private static HashMap<String,String> token;
     public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException, NoSuchAlgorithmException {
-        ServerSocket serverViewer = new ServerSocket(1);
-        //ServerSocket serverControl = new ServerSocket(2);
-        System.out.println("Waitting...");
-        for(;;)
-        {
-            Socket socketViewer = serverViewer.accept();
-            //Socket socketControl = serverControl.accept();
-            ObjectInputStream oisViewer = new ObjectInputStream(socketViewer.getInputStream());
-            //ObjectInputStream oisControl = new ObjectInputStream(socketControl.getInputStream());
-            ObjectOutputStream oosViewer = new ObjectOutputStream(socketViewer.getOutputStream());
-            //ObjectOutputStream oosControl = new ObjectOutputStream(socketControl.getOutputStream());
-            String command = oisViewer.readUTF();
-            //Login section
-            if(command == "login")
-            {
-                command = oisViewer.readUTF();
-                if(!isUserExist(command)) {
-                    oosViewer.writeUTF("Invalid user");
-                }else
-                {
-                    currentUserName = command;
-                    command = oisViewer.readUTF();
-                    if(!isUserAuthentication(currentUserName,command)){
-                        oosViewer.writeUTF("Invalid password");
-                    }else {
-                        oosViewer.writeUTF("Login success");
+        ServerSocket serverSocket = new ServerSocket(1);
+        System.out.println("Waiting...");
+        for(;;) {
+            Socket socket = serverSocket.accept();
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            String command = ois.readUTF();
+            if(command.equals("createUser")){
+                User user = (User) ois.readObject();
+                try {
+                    SaveData.saveNewUser(user);
+                    oos.writeUTF("Save user success!");
+                } catch (SQLException ex) {
+                    if(ex.getErrorCode() == 1062 ) {
+                        oos.writeUTF("User already exist!");
+                    }else
+                    {
+                        oos.writeUTF("Something wrong with database");
+                        ex.printStackTrace();
                     }
-                    oosViewer.flush();
                 }
-                oosViewer.flush();
+                oos.flush();
             }
-
-            //Create new user section
-            if(command == "create") {
-                User user = (User) oisViewer.readObject();
-                SaveData.saveNewUser(user);
-                oosViewer.writeUTF("Save success!");
-                oosViewer.flush();
+            else if(command.equals("createBillboard")){
+                Billboard billboard = (Billboard) ois.readObject();
+                try{
+                    SaveData.saveBillboard(billboard);
+                    oos.writeUTF("Save billboard success!");
+                }catch (SQLException ex){
+                    oos.writeUTF("Fail to save billboard!");
+                    ex.printStackTrace();
+                }
+                oos.flush();
             }
-
-            //oisControl.close();
-            oisViewer.close();
-            //socketControl.close();
-            socketViewer.close();
+            else if(command.equals("createSchedule")){
+                Schedule schedule = (Schedule) ois.readObject();
+                try{
+                    SaveData.saveSchedule(schedule);
+                    oos.writeUTF("Save schedule success!");
+                }catch (SQLException ex){
+                    oos.writeUTF("Fail to save schedule!");
+                    ex.printStackTrace();
+                }
+                oos.flush();
+            }
+            else if(command.equals("login")){
+                String userName = ois.readUTF();
+                String pass = ois.readUTF();
+                if (!isUserExist(userName)) {
+                    oos.writeUTF("Invalid user");
+                } else {
+                    currentUserName = userName;
+                    if (!isUserAuthentication(currentUserName, pass)) {
+                        oos.writeUTF("Invalid password");
+                    } else {
+                        oos.writeUTF("Login success");
+                        token = CreateToken();
+                        oos.writeUTF(token.get("token"));
+                    }
+                }
+                oos.flush();
+            }
+            ois.close();
+            oos.close();
+            socket.close();
         }
     }
 
@@ -75,36 +94,31 @@ public class Server {
         else {return false;}
     }
 
-    private static List<String> getUserNames()
-    {
+    private static List<String> getUserNames() throws SQLException {
         List<String> userNames = new ArrayList<String>();
         Connection connection = DBConnection.getInstance();
-        String getUserNames = "SELECT * FROM users";
-        try
+        String getUserNames = "SELECT * FROM users;";
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getUserNames);
+        while (rs.next())
         {
-            Statement st = connection.createStatement();
-            ResultSet resultSet = st.executeQuery(getUserNames);
-            while (resultSet.next())
-            {
-                userNames.add(resultSet.getString(1));
-            }
-            st.close();
-            connection.close();
-        }catch (SQLException ex){
-            ex.printStackTrace();
+            userNames.add(rs.getString(1));
         }
+        st.close();
+        rs.close();
         return userNames;
     }
 
     /*
      * compare hashed password in db to hashed password sent by control panel
      */
-    private static Boolean isUserAuthentication(String userName, String hashedPassword)
-    {
+    private static Boolean isUserAuthentication(String userName, String hashedPassword) throws SQLException {
         String salt = GetData.getSalt(userName);
         String hashedPassword2ndDb = GetData.getHashedPassword2nd(userName);
         String hashedPassword2nd = User.hashPassword(hashedPassword,salt.getBytes());
-        if(hashedPassword2nd == hashedPassword2ndDb){
+        System.out.println(hashedPassword2ndDb);
+        System.out.println(hashedPassword2nd);
+        if(hashedPassword2nd.equals(hashedPassword2ndDb)){
             return true;
         }else {
             return false;
@@ -114,9 +128,9 @@ public class Server {
     /*
      * Create token for logging success to access tasks
      */
-    private static Map<String,String> CreateToken() {
+    private static HashMap<String,String> CreateToken() {
         SecureRandom random = new SecureRandom();
-        Map<String,String> token = new HashMap<String,String>();
+        HashMap<String,String> token = new HashMap<String,String>();
 
         //Create random token
         byte[] tokenString = new byte[16];
@@ -133,14 +147,61 @@ public class Server {
         return token;
     }
 
-    private static boolean isTokenExpired(Map<String,String> token) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    private static boolean isTokenExpired(HashMap<String,String> token) throws ParseException {
         Date currentDate = new Date();
-        Date expiryDate = formatter.parse(token.get("expiryDate"));
+        Date expiryDate = parseDateTime(token.get("expiryDate"));
         if(currentDate.after(expiryDate)){
             return false;
         }else {
             return true;
+        }
+    }
+    Date date = new Date();
+
+    public static String parseStringDate(Date date) {
+        if (date != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            return formatter.format(date);
+        }
+        return null;
+    }
+
+    public static String parseStringTime(Date time) {
+        if (time != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            return formatter.format(time);
+        }
+        return null;
+    }
+    public static String parseStringDateTime(Date dateTime) {
+        if (dateTime != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return formatter.format(dateTime);
+        }
+        return null;
+    }
+
+    public static Date parseDate(String date) {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Date parseTime(String date) {
+        try {
+            return new SimpleDateFormat("HH:mm:ss").parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Date parseDateTime(String date) {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+        } catch (ParseException e) {
+            return null;
         }
     }
 }
