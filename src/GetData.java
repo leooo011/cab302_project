@@ -9,29 +9,25 @@ public class GetData {
     /*
      * Get all users props
      */
-    public static List<User> getAllUser(){
+    public static List<User> getAllUser() throws SQLException {
         List<User> users = new ArrayList<User>();
         Connection connection = DBConnection.getInstance();
-        String getAllUsersName = "SELECT userName from users";
-        try{
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(getAllUsersName);
-            while (rs.next()){
-                String userName = rs.getString(1);
-                users.add(getUser(userName));
-            }
-            st.close();
-            rs.close();
-        }catch (SQLException ex){
-            ex.printStackTrace();
+        String getAllUsersName = "SELECT userName from users;";
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getAllUsersName);
+        while (rs.next()){
+            String userName = rs.getString(1);
+            users.add(getUser(userName));
         }
+        st.close();
+        rs.close();
         return users;
     }
 
     /*
      * Get user by user name
      */
-    public static User getUser(String userName){
+    public static User getUser(String userName) throws SQLException {
         Boolean editUsers = hasEditUsersPermission(userName);
         Boolean editAllBillboard = hasEditAllBillboardPermission(userName);
         Boolean scheduleBillboard = hasScheduleBillboardPermission(userName);
@@ -44,22 +40,17 @@ public class GetData {
      * Get hash password 2nd from db
      * Return null if cant connect to db
      */
-    public static String getHashedPassword2nd(String userName){
+    public static String getHashedPassword2nd(String userName) throws SQLException {
         String hashedPassword2nd =null;
         Connection connection = DBConnection.getInstance();
-        String getUserHashedPassword2nd = String.format("SELECT hashedPassword2nd from users WHERE userName = '%s'",userName);
-        try{
-            Statement st = connection.createStatement();
-            ResultSet rs =  st.executeQuery(getUserHashedPassword2nd);
-            hashedPassword2nd =  rs.getString(1);
-
-            st.close();
-            rs.close();
-            connection.close();
-        }catch (SQLException ex)
-        {
-            ex.printStackTrace();
+        String getUserHashedPassword2nd = String.format("SELECT hashedPassword2nd from users WHERE userName = '%s';",userName);
+        Statement st = connection.createStatement();
+        ResultSet rs =  st.executeQuery(getUserHashedPassword2nd);
+        if(rs.next()) {
+            hashedPassword2nd = rs.getString(1);
         }
+        st.close();
+        rs.close();
         return hashedPassword2nd;
     }
 
@@ -67,22 +58,17 @@ public class GetData {
      * Get salt from db
      * Return null if cant connect to db
      */
-    public static String getSalt(String userName){
-        Connection connection = DBConnection.getInstance();
-        String getSalt = String.format("SELECT salt from users WHERE userName = '%s'",userName);
+    public static String getSalt(String userName) throws SQLException {
+        String getSalt = String.format("SELECT salt from users WHERE userName = '%s';",userName);
         String salt = null;
-        try{
-            Statement st = connection.createStatement();
-            ResultSet rs =  st.executeQuery(getSalt);
-            salt =  rs.getString(1);
-
-            st.close();
-            rs.close();
-            connection.close();
-        }catch (SQLException ex)
-        {
-            ex.printStackTrace();
+        Connection connection = DBConnection.getInstance();
+        Statement st = connection.createStatement();
+        ResultSet rs =  st.executeQuery(getSalt);
+        if(rs.next()) {
+            salt = rs.getString(1);
         }
+        st.close();
+        rs.close();
         return salt;
     }
 
@@ -90,21 +76,18 @@ public class GetData {
      * Get edit user permission from fb
      * Return null if cant connect to db
      */
-    public static Boolean hasEditUsersPermission(String userName){
+    public static Boolean hasEditUsersPermission(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
         String getEditUsersPermission = String.format("SELECT editUsers from users WHERE userName = '%s'",userName);
         Boolean editUsersPermission = null;
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(getEditUsersPermission);
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getEditUsersPermission);
+        if (rs.next()) {
             editUsersPermission = rs.getBoolean(1);
-
-            st.close();
-            rs.close();
-            connection.close();
-        }catch (SQLException ex){
-            ex.printStackTrace();
         }
+
+        st.close();
+        rs.close();
         return editUsersPermission;
     }
 
@@ -112,21 +95,18 @@ public class GetData {
      * Get edit all billboard permission from fb
      * Return null if cant connect to db
      */
-    public static Boolean hasEditAllBillboardPermission(String userName){
+    public static Boolean hasEditAllBillboardPermission(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
         String getEditAllBillboardPermission = String.format("SELECT editAllBillboard from users WHERE userName = '%s'",userName);
         Boolean editAllBillboardPermission = null;
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(getEditAllBillboardPermission);
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getEditAllBillboardPermission);
+        if(rs.next()) {
             editAllBillboardPermission = rs.getBoolean(1);
-
-            st.close();
-            rs.close();
-            connection.close();
-        }catch (SQLException ex){
-            ex.printStackTrace();
         }
+
+        st.close();
+        rs.close();
         return editAllBillboardPermission;
     }
 
@@ -134,21 +114,18 @@ public class GetData {
      * Get create billboard permission from fb
      * Return null if cant connect to db
      */
-    public static Boolean hasCreateBillPermission(String userName){
+    public static Boolean hasCreateBillPermission(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
         String getCreateBillboardPermission = String.format("SELECT createBillboard from users WHERE userName = '%s'",userName);
         Boolean editCreateBillboardPermission = null;
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(getCreateBillboardPermission);
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getCreateBillboardPermission);
+        if(rs.next()) {
             editCreateBillboardPermission = rs.getBoolean(1);
-
-            st.close();
-            rs.close();
-            connection.close();
-        }catch (SQLException ex){
-            ex.printStackTrace();
         }
+
+        st.close();
+        rs.close();
         return editCreateBillboardPermission;
     }
 
@@ -156,21 +133,19 @@ public class GetData {
      * Get schedule billboard permission from fb
      * Return null if cant connect to db
      */
-    public static Boolean hasScheduleBillboardPermission(String userName){
+    public static Boolean hasScheduleBillboardPermission(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
         String getScheduleBillboardPermission = String.format("SELECT scheduleBillboard from users WHERE userName = '%s'",userName);
         Boolean editScheduleBillboardPermission = null;
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(getScheduleBillboardPermission);
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getScheduleBillboardPermission);
+        if(rs.next()) {
             editScheduleBillboardPermission = rs.getBoolean(1);
-
-            st.close();
-            rs.close();
-            connection.close();
-        }catch (SQLException ex){
-            ex.printStackTrace();
         }
+
+        st.close();
+        rs.close();
+        connection.close();
         return editScheduleBillboardPermission;
     }
 
@@ -179,7 +154,7 @@ public class GetData {
      */
     public static List<Billboard> getBillboardsByUserName(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String getBillboard = String.format("SELECT * from billboard WHERE userName = '%s'",userName);
+        String getBillboard = String.format("SELECT * from billboards WHERE userName = '%s'",userName);
         List<Billboard> billboards = new ArrayList<Billboard>();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getBillboard);
@@ -189,7 +164,6 @@ public class GetData {
 
         st.close();
         rs.close();
-        connection.close();
         return billboards;
     }
 
@@ -198,30 +172,30 @@ public class GetData {
      */
     public static Billboard getBillboard(String userName,String billboardName) throws SQLException {
         String billboardBackground,messageText,messageColour,infoText,infoColor,pictureUrl, pictureData;
-        String getBillboardData = String.format("SELECT * from billboard WHERE userName = '%s' AND billboardName = '%s'",userName,billboardName);
+        String getBillboardData = String.format("SELECT * from billboards WHERE userName = '%s' AND billboardName = '%s'",userName,billboardName);
+        Billboard billboard = new Billboard(userName, billboardName);
         Connection connection = DBConnection.getInstance();
-
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getBillboardData);
-        billboardBackground = rs.getString(3);
-        messageText = rs.getString(4);
-        messageColour = rs.getString(5);
-        infoText = rs.getString(6);
-        infoColor = rs.getString(7);
-        pictureUrl = rs.getString(8);
-        pictureData = rs.getBlob(9).toString();
-        Billboard billboard = new Billboard(userName,billboardName);
-        billboard.changeProperties("billboard","background",billboardBackground);
-        billboard.changeProperties("info","text",infoText);
-        billboard.changeProperties("info","colour",infoColor);
-        billboard.changeProperties("message","text",messageText);
-        billboard.changeProperties("message","colour",messageColour);
-        billboard.changeProperties("picture","url",pictureUrl);
-        billboard.changeProperties("picture","pictureData",pictureData);
+        if(rs.next()) {
+            billboardBackground = rs.getString(3);
+            messageText = rs.getString(4);
+            messageColour = rs.getString(5);
+            infoText = rs.getString(6);
+            infoColor = rs.getString(7);
+            pictureUrl = rs.getString(8);
+            pictureData = rs.getBlob(9).toString();
+            billboard.changeProperties("billboard", "background", billboardBackground);
+            billboard.changeProperties("info", "text", infoText);
+            billboard.changeProperties("info", "colour", infoColor);
+            billboard.changeProperties("message", "text", messageText);
+            billboard.changeProperties("message", "colour", messageColour);
+            billboard.changeProperties("picture", "url", pictureUrl);
+            billboard.changeProperties("picture", "pictureData", pictureData);
+        }
 
         st.close();
         rs.close();
-        connection.close();
         return billboard;
     }
 
@@ -230,7 +204,7 @@ public class GetData {
      */
     public static List<Billboard> getAllBillboards() throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String getBillboard = "SELECT * from billboard";
+        String getBillboard = "SELECT * from billboards";
         List<Billboard> billboards = new ArrayList<Billboard>();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getBillboard);
@@ -243,7 +217,6 @@ public class GetData {
         }
         st.close();
         rs.close();
-        connection.close();
         return billboards;
     }
 
@@ -256,7 +229,7 @@ public class GetData {
         String userName, billboardName;
         Connection connection = DBConnection.getInstance();
         SimpleDateFormat dateFormatter = new  SimpleDateFormat("yyyy-mm-dd");
-        String getSuitableSchedule = String.format("SELECT* from schedule WHERE date = '%s'",dateFormatter.parse((new Date()).toString()),dateFormatter.parse(new Date().toString()));
+        String getSuitableSchedule = String.format("SELECT* from schedules WHERE date = '%s'",dateFormatter.parse((new Date()).toString()),dateFormatter.parse(new Date().toString()));
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getSuitableSchedule);
 
@@ -265,7 +238,7 @@ public class GetData {
             billboardName = rs.getString(2);
             time = rs.getTime(3);
             date = rs.getDate(4);
-            duration = rs.getDate(5);
+            duration = rs.getTime(5);
             recurTime = rs.getDate(6);
             Schedule schedule = new Schedule(getUser(userName),getBillboard(userName,billboardName),date,time,recurTime,duration);
             schedules.add(schedule);
@@ -273,7 +246,6 @@ public class GetData {
 
         st.close();
         rs.close();
-        connection.close();
         return schedules;
     }
 }
