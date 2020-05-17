@@ -27,10 +27,11 @@ public  class SaveData {
      *    Set own password: None
      *    Set password of another user: Edit Users
      */
-    public static void changeUserPassword(String userName,String editUserName, String newHashedPassword) throws SQLException {
+    public static void changeUserPassword(String editUserName, String newHashedPassword) throws SQLException {
         //Hash password 2nd times to save to db
-        String hashedPassword2nd = User.hashPassword(GetData.getHashedPassword2nd(userName));
-        String updateUser = String.format("UPDATE users SET hashedPassword = '%s' WHERE userName = '%s'",hashedPassword2nd,userName);
+        String salt = GetData.getSalt(editUserName);
+        String hashedPassword2nd = User.hashPassword(newHashedPassword,salt.getBytes());
+        String updateUser = String.format("UPDATE users SET hashedPassword = '%s' WHERE userName = '%s'",hashedPassword2nd,editUserName);
         Connection connection = DBConnection.getInstance();
         Statement st = connection.createStatement();
         st.execute(updateUser);
@@ -128,9 +129,11 @@ public  class SaveData {
      */
     public static void updateBillboardName(String userName, String billboardName, String newBillboardName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateBillboard = String.format("UPDATE billboards SET billboardName = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newBillboardName,userName,billboardName);
+        String updateBillboardInBillboards = String.format("UPDATE billboards SET billboardName = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newBillboardName,userName,billboardName);
+        String updateBillboardInSchedules = String.format("UPDATE schedules SET billboardName = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newBillboardName,userName,billboardName);
         Statement st = connection.createStatement();
-        st.execute(updateBillboard);
+        st.execute(updateBillboardInBillboards);
+        st.execute(updateBillboardInSchedules);
 
         st.close();
         updateScheduleBillboardName(userName,billboardName,newBillboardName);
