@@ -2,15 +2,14 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
 
 public class GetData {
     /*
      * Get all users props
      */
-    public static List<User> getAllUser() throws SQLException {
-        List<User> users = new ArrayList<User>();
+    public static ArrayList<User> getAllUser() throws SQLException {
+        ArrayList<User> users = new ArrayList<User>();
         Connection connection = DBConnection.getInstance();
         String getAllUsersName = "SELECT userName from users;";
         Statement st = connection.createStatement();
@@ -31,7 +30,7 @@ public class GetData {
         Boolean editUsers = hasEditUsersPermission(userName);
         Boolean editAllBillboard = hasEditAllBillboardPermission(userName);
         Boolean scheduleBillboard = hasScheduleBillboardPermission(userName);
-        Boolean createBillboard = hasCreateBillPermission(userName);
+        Boolean createBillboard = hasCreateBillboardPermission(userName);
         User user = new User(userName,editUsers,editAllBillboard,createBillboard,scheduleBillboard);
         return user;
     }
@@ -114,7 +113,7 @@ public class GetData {
      * Get create billboard permission from fb
      * Return null if cant connect to db
      */
-    public static Boolean hasCreateBillPermission(String userName) throws SQLException {
+    public static Boolean hasCreateBillboardPermission(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
         String getCreateBillboardPermission = String.format("SELECT createBillboard from users WHERE userName = '%s'",userName);
         Boolean editCreateBillboardPermission = null;
@@ -152,10 +151,10 @@ public class GetData {
     /*
      * Get list of billboard by user name
      */
-    public static List<Billboard> getBillboardsByUserName(String userName) throws SQLException {
+    public static ArrayList<Billboard> getBillboardsByUserName(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
         String getBillboard = String.format("SELECT * from billboards WHERE userName = '%s'",userName);
-        List<Billboard> billboards = new ArrayList<Billboard>();
+        ArrayList<Billboard> billboards = new ArrayList<Billboard>();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getBillboard);
         while (rs.next()){
@@ -202,10 +201,10 @@ public class GetData {
     /*
      * Get all billboard available in db
      */
-    public static List<Billboard> getAllBillboards() throws SQLException {
+    public static ArrayList<Billboard> getAllBillboards() throws SQLException {
         Connection connection = DBConnection.getInstance();
         String getBillboard = "SELECT * from billboards";
-        List<Billboard> billboards = new ArrayList<Billboard>();
+        ArrayList<Billboard> billboards = new ArrayList<Billboard>();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getBillboard);
         String userName,billboardName;
@@ -223,13 +222,41 @@ public class GetData {
     /*
      *Get suitable schedule of all billboard to display
      */
-    public static ArrayList<Schedule> getSchedulesList() throws SQLException, ParseException {
+    public static ArrayList<Schedule> getTodaySchedules() throws SQLException, ParseException {
         ArrayList<Schedule> schedules = new ArrayList<Schedule>();
         Date date,time,duration,recurTime;
         String userName, billboardName;
         Connection connection = DBConnection.getInstance();
         SimpleDateFormat dateFormatter = new  SimpleDateFormat("yyyy-mm-dd");
         String getSuitableSchedule = String.format("SELECT* from schedules WHERE date = '%s'",dateFormatter.parse((new Date()).toString()),dateFormatter.parse(new Date().toString()));
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(getSuitableSchedule);
+
+        while (rs.next()){
+            userName = rs.getString(1);
+            billboardName = rs.getString(2);
+            time = rs.getTime(3);
+            date = rs.getDate(4);
+            duration = rs.getTime(5);
+            recurTime = rs.getDate(6);
+            Schedule schedule = new Schedule(getUser(userName),getBillboard(userName,billboardName),date,time,recurTime,duration);
+            schedules.add(schedule);
+        }
+
+        st.close();
+        rs.close();
+        return schedules;
+    }
+
+    /*
+     *Get all schedules
+     */
+    public static ArrayList<Schedule> getAllSchedules() throws SQLException {
+        ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+        Date date,time,duration,recurTime;
+        String userName, billboardName;
+        Connection connection = DBConnection.getInstance();
+        String getSuitableSchedule = String.format("SELECT* from schedules ");
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getSuitableSchedule);
 
