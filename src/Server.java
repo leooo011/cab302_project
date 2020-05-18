@@ -436,33 +436,37 @@ public class Server {
             else {
                 /*
                  * Get today schedules
+                 * Return null if there is nothing to show
                  */
                 if(command.equals("get schedule now")){
                     Date dateNow = new Date();
-                    for(Schedule schedule:schedules){
-                        Date start = schedule.getTime();
-                        Date duration = schedule.getDuration();
-                        Calendar end = Calendar.getInstance();
-                        end.setTime(duration);
-                        String[] timeDurationData = duration.toString().split(":");
-                        int S =Integer.parseInt(timeDurationData[2]);
-                        int M =Integer.parseInt(timeDurationData[1]);
-                        int H =Integer.parseInt(timeDurationData[0]);
-                        end.add(Calendar.HOUR,H);
-                        end.add(Calendar.MINUTE,M);
-                        end.add(Calendar.SECOND,S);
-                        if(start.before(parseTime(dateNow.toString()))&&end.after(parseTime(dateNow.toString()))){
-                            Billboard currentBillboard = GetData.getBillboard(schedule.getAuthor(),schedule.getBillboardName());
-                            currentBillboardName = currentBillboard.getBillboardName();
-                            oos.writeObject(currentBillboard);
+                    if(schedules!=null) {
+                        for (Schedule schedule : schedules) {
+                            Date start = schedule.getTime();
+                            Date duration = schedule.getDuration();
+                            Calendar end = Calendar.getInstance();
+                            end.setTime(duration);
+                            String[] timeDurationData = duration.toString().split(":");
+                            int S = Integer.parseInt(timeDurationData[2]);
+                            int M = Integer.parseInt(timeDurationData[1]);
+                            int H = Integer.parseInt(timeDurationData[0]);
+                            end.add(Calendar.HOUR, H);
+                            end.add(Calendar.MINUTE, M);
+                            end.add(Calendar.SECOND, S);
+                            if (start.before(parseTime(dateNow.toString())) && end.after(parseTime(dateNow.toString()))) {
+                                Billboard currentBillboard = GetData.getBillboard(schedule.getAuthor(), schedule.getBillboardName());
+                                currentBillboardName = currentBillboard.getBillboardName();
+                                oos.writeObject(currentBillboard);
+                            } else {
+                                oos.writeObject(null);
+                            }
+                            oos.flush();
                         }
-                        else {
-                            oos.writeUTF("There is nothing to show");
-                        }
-                        oos.flush();
                     }
-
-
+                    else
+                    {
+                        oos.writeObject(null);
+                    }
                 }/*
                  *Login: access to control app
                  * Client send: user name, hashed pass
