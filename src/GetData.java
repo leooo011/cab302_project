@@ -2,6 +2,7 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class GetData {
@@ -227,8 +228,7 @@ public class GetData {
         Date date,time,duration,recurTime;
         String userName, billboardName;
         Connection connection = DBConnection.getInstance();
-        SimpleDateFormat dateFormatter = new  SimpleDateFormat("yyyy-mm-dd");
-        String getSuitableSchedule = String.format("SELECT* from schedules WHERE date = '%s'",dateFormatter.parse((new Date()).toString()),dateFormatter.parse(new Date().toString()));
+        String getSuitableSchedule = String.format("SELECT* from schedules WHERE date = '%s';",Server.parseStringDate(new Date()));
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getSuitableSchedule);
 
