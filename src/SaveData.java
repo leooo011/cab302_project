@@ -31,7 +31,7 @@ public  class SaveData {
         //Hash password 2nd times to save to db
         String salt = GetData.getSalt(editUserName);
         String hashedPassword2nd = User.hashPassword(newHashedPassword,salt.getBytes());
-        String updateUser = String.format("UPDATE users SET hashedPassword = '%s' WHERE userName = '%s'",hashedPassword2nd,editUserName);
+        String updateUser = String.format("UPDATE users SET hashedPassword = '%s' WHERE userName = '%s';",hashedPassword2nd,editUserName);
         Connection connection = DBConnection.getInstance();
         Statement st = connection.createStatement();
         st.execute(updateUser);
@@ -42,7 +42,7 @@ public  class SaveData {
      */
     public static void changeEditUsersPermission(String userName,Boolean permission) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String changeEditUsersPermission = String.format("UPDATE users SET editUsers = '%d' WHERE userName = '%s'",permission,userName);
+        String changeEditUsersPermission = String.format("UPDATE users SET editUsers = '%d' WHERE userName = '%s';",permission,userName);
         Statement st = connection.createStatement();
         st.execute(changeEditUsersPermission);
 
@@ -54,7 +54,7 @@ public  class SaveData {
      */
     public static void changeEditAllBillboardPermission(String userName,Boolean permission) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String changeEditAllBillboardPermission = String.format("UPDATE users SET editAllBillboard = '%d' WHERE userName = '%s'",permission,userName);
+        String changeEditAllBillboardPermission = String.format("UPDATE users SET editAllBillboard = '%d' WHERE userName = '%s';",permission,userName);
         Statement st = connection.createStatement();
         st.execute(changeEditAllBillboardPermission);
 
@@ -66,7 +66,7 @@ public  class SaveData {
      */
     public static void changeScheduleBillboardPermission(String userName,Boolean permission) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String changeScheduleBillboardPermission = String.format("UPDATE users SET scheduleBillboard = '%d' WHERE userName = '%s'",permission,userName);
+        String changeScheduleBillboardPermission = String.format("UPDATE users SET scheduleBillboard = '%d' WHERE userName = '%s';",permission,userName);
         Statement st = connection.createStatement();
         st.execute(changeScheduleBillboardPermission);
 
@@ -78,7 +78,7 @@ public  class SaveData {
      */
     public static void changeCreateBillboardPermission(String userName,Boolean permission) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String changeCreateBillboardPermission = String.format("UPDATE users SET createBillboard = '%d' WHERE userName = '%s'",permission,userName);
+        String changeCreateBillboardPermission = String.format("UPDATE users SET createBillboard = '%d' WHERE userName = '%s';",permission,userName);
         Statement st = connection.createStatement();
         st.execute(changeCreateBillboardPermission);
 
@@ -90,7 +90,7 @@ public  class SaveData {
      */
     public static void deleteUser(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String deleteUser = String.format("DELETE FROM users WHERE userName = '%s'",userName);
+        String deleteUser = String.format("DELETE FROM users WHERE userName = '%s';",userName);
         Statement st = connection.createStatement();
         st.execute(deleteUser);
 
@@ -117,7 +117,7 @@ public  class SaveData {
      */
     public static void deleteBillboard(String userName,String billboardName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String deleteBillboard = String.format("DELETE from billboards WHERE (userName = '%s' AND billboardName = '%s'",userName,billboardName);
+        String deleteBillboard = String.format("DELETE from billboards WHERE (userName = '%s' AND billboardName = '%s';",userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(deleteBillboard);
 
@@ -129,8 +129,8 @@ public  class SaveData {
      */
     public static void updateBillboardName(String userName, String billboardName, String newBillboardName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateBillboardInBillboards = String.format("UPDATE billboards SET billboardName = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newBillboardName,userName,billboardName);
-        String updateBillboardInSchedules = String.format("UPDATE schedules SET billboardName = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newBillboardName,userName,billboardName);
+        String updateBillboardInBillboards = String.format("UPDATE billboards SET billboardName = '%s' (WHERE userName = '%s' AND billboardName = '%s';",newBillboardName,userName,billboardName);
+        String updateBillboardInSchedules = String.format("UPDATE schedules SET billboardName = '%s' (WHERE userName = '%s' AND billboardName = '%s';",newBillboardName,userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(updateBillboardInBillboards);
         st.execute(updateBillboardInSchedules);
@@ -144,7 +144,7 @@ public  class SaveData {
      */
     public static void updateBillboardBackground(String userName, String billboardName, String newBackground) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateBillboard = String.format("UPDATE billboards SET billboardBackground = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newBackground,userName,billboardName);
+        String updateBillboard = String.format("UPDATE billboards SET billboardBackground = '%s' (WHERE userName = '%s' AND billboardName = '%s';",newBackground,userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(updateBillboard);
 
@@ -156,7 +156,7 @@ public  class SaveData {
      */
     public static void updateBillboardMessageText(String userName, String billboardName, String newMessageText) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateBillboard = String.format("UPDATE billboards SET messageText = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newMessageText,userName,billboardName);
+        String updateBillboard = String.format("UPDATE billboards SET messageText = '%s' (WHERE userName = '%s' AND billboardName = '%s';",newMessageText,userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(updateBillboard);
 
@@ -168,7 +168,7 @@ public  class SaveData {
      */
     public static void updateBillboardMessageColour(String userName, String billboardName, String newMessageColour) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateBillboard= String.format("UPDATE billboards SET messageColour = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newMessageColour,userName,billboardName);
+        String updateBillboard= String.format("UPDATE billboards SET messageColour = '%s' (WHERE userName = '%s' AND billboardName = '%s';",newMessageColour,userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(updateBillboard);
 
@@ -180,7 +180,7 @@ public  class SaveData {
      */
     public static void updateBillboardInfoText(String userName, String billboardName, String newInfoText) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateBillboard = String.format("UPDATE billboards SET infoText = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newInfoText,userName,billboardName);
+        String updateBillboard = String.format("UPDATE billboards SET infoText = '%s' (WHERE userName = '%s' AND billboardName = '%s';",newInfoText,userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(updateBillboard);
 
@@ -192,7 +192,7 @@ public  class SaveData {
      */
     public static void updateBillboardInfoColour(String userName, String billboardName, String newInfoColour) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateBillboard = String.format("UPDATE billboards SET infoColor = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newInfoColour,userName,billboardName);
+        String updateBillboard = String.format("UPDATE billboards SET infoColor = '%s' (WHERE userName = '%s' AND billboardName = '%s';",newInfoColour,userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(updateBillboard);
 
@@ -204,7 +204,7 @@ public  class SaveData {
      */
     public static void updateBillboardPictureUrl(String userName, String billboardName, String newUrl) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateBillboard = String.format("UPDATE billboards SET pictureUrl = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newUrl,userName,billboardName);
+        String updateBillboard = String.format("UPDATE billboards SET pictureUrl = '%s' (WHERE userName = '%s' AND billboardName = '%s';",newUrl,userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(updateBillboard);
 
@@ -216,7 +216,7 @@ public  class SaveData {
      */
     public static void updateBillboardPictureData(String userName, String billboardName, String newData) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateBillboard = String.format("UPDATE billboards SET pictureData = '%s' (WHERE userName = '%s' AND billboardName = '%s'",newData,userName,billboardName);
+        String updateBillboard = String.format("UPDATE billboards SET pictureData = '%s' (WHERE userName = '%s' AND billboardName = '%s';",newData,userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(updateBillboard);
 
@@ -228,7 +228,7 @@ public  class SaveData {
      */
     public static void saveSchedule(Schedule schedule) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String saveSchedule = String.format("INSERT INTO schedules VALUES ('%s','%s','%s','%s','%s','%s')",schedule.getAuthor(),schedule.getBillboardName(),Server.parseStringTime(schedule.getTime()),Server.parseStringDate(schedule.getDate()),Server.parseStringTime(schedule.getDuration()),Server.parseStringTime(schedule.getRecurTime()));
+        String saveSchedule = String.format("INSERT INTO schedules VALUES ('%s','%s','%s','%s','%s','%s');",schedule.getAuthor(),schedule.getBillboardName(),Server.parseStringTime(schedule.getTime()),Server.parseStringDate(schedule.getDate()),Server.parseStringTime(schedule.getDuration()),Server.parseStringTime(schedule.getRecurTime()));
         Statement st = connection.createStatement();
         st.execute(saveSchedule);
 
@@ -240,7 +240,7 @@ public  class SaveData {
      */
     public static void deleteSchedule(String userName, String billboardName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String deleteSchedule = String.format("DELETE from schedules (WHERE userName = '%s' AND billboardName = '%s'",userName,billboardName);
+        String deleteSchedule = String.format("DELETE from schedules (WHERE userName = '%s' AND billboardName = '%s';",userName,billboardName);
         Statement st = connection.createStatement();
         st.execute(deleteSchedule);
 
@@ -252,7 +252,7 @@ public  class SaveData {
      */
     public static void updateScheduleBillboardName(String userName, String billboardName, String newBillboardName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateSchedule = String.format("UPDATE schedules SET billboardName = '%s'",newBillboardName);
+        String updateSchedule = String.format("UPDATE schedules SET billboardName = '%s';",newBillboardName);
         Statement st = connection.createStatement();
         st.execute(updateSchedule);
 
@@ -264,7 +264,7 @@ public  class SaveData {
      */
     public static void updateScheduleDate(String userName, String billboardName, String newDate) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateSchedule = String.format("UPDATE schedules SET date = '%s'",newDate);
+        String updateSchedule = String.format("UPDATE schedules SET date = '%s';",newDate);
         Statement st = connection.createStatement();
         st.execute(updateSchedule);
 
@@ -276,7 +276,7 @@ public  class SaveData {
      */
     public static void updateScheduleTime(String userName, String billboardName, String newTime) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateSchedule = String.format("UPDATE schedules SET time = '%s'",newTime);
+        String updateSchedule = String.format("UPDATE schedules SET time = '%s';",newTime);
         Statement st = connection.createStatement();
         st.execute(updateSchedule);
 
@@ -288,7 +288,7 @@ public  class SaveData {
      */
     public static void updateScheduleDuration(String userName, String billboardName, String newDuration) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateSchedule = String.format("UPDATE schedules SET duration = '%s'",newDuration);
+        String updateSchedule = String.format("UPDATE schedules SET duration = '%s';",newDuration);
         Statement st = connection.createStatement();
         st.execute(updateSchedule);
 
@@ -300,7 +300,7 @@ public  class SaveData {
      */
     public static void updateScheduleRecurTime(String userName, String billboardName, String newRecurTime) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String updateSchedule = String.format("UPDATE schedules SET recurTime = '%s'",newRecurTime);
+        String updateSchedule = String.format("UPDATE schedules SET recurTime = '%s';",newRecurTime);
         Statement st = connection.createStatement();
         st.execute(updateSchedule);
 
