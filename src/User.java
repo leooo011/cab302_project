@@ -45,7 +45,6 @@ public class User implements Serializable {
     public String getSalt(){
         return salt.toString();
     }
-    public void setSalt(String salt){this.salt = salt.getBytes();};
     public void changeUserName(String newUserName){
             userName = newUserName;
     }
