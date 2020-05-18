@@ -78,7 +78,7 @@ public class GetData {
      */
     public static Boolean hasEditUsersPermission(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String getEditUsersPermission = String.format("SELECT editUsers from users WHERE userName = '%s'",userName);
+        String getEditUsersPermission = String.format("SELECT editUsers from users WHERE userName = '%s';",userName);
         Boolean editUsersPermission = null;
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getEditUsersPermission);
@@ -97,7 +97,7 @@ public class GetData {
      */
     public static Boolean hasEditAllBillboardPermission(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String getEditAllBillboardPermission = String.format("SELECT editAllBillboard from users WHERE userName = '%s'",userName);
+        String getEditAllBillboardPermission = String.format("SELECT editAllBillboard from users WHERE userName = '%s';",userName);
         Boolean editAllBillboardPermission = null;
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getEditAllBillboardPermission);
@@ -116,7 +116,7 @@ public class GetData {
      */
     public static Boolean hasCreateBillboardPermission(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String getCreateBillboardPermission = String.format("SELECT createBillboard from users WHERE userName = '%s'",userName);
+        String getCreateBillboardPermission = String.format("SELECT createBillboard from users WHERE userName = '%s';",userName);
         Boolean editCreateBillboardPermission = null;
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getCreateBillboardPermission);
@@ -135,7 +135,7 @@ public class GetData {
      */
     public static Boolean hasScheduleBillboardPermission(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String getScheduleBillboardPermission = String.format("SELECT scheduleBillboard from users WHERE userName = '%s'",userName);
+        String getScheduleBillboardPermission = String.format("SELECT scheduleBillboard from users WHERE userName = '%s';",userName);
         Boolean editScheduleBillboardPermission = null;
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getScheduleBillboardPermission);
@@ -154,7 +154,7 @@ public class GetData {
      */
     public static ArrayList<Billboard> getBillboardsByUserName(String userName) throws SQLException {
         Connection connection = DBConnection.getInstance();
-        String getBillboard = String.format("SELECT * from billboards WHERE userName = '%s'",userName);
+        String getBillboard = String.format("SELECT * from billboards WHERE userName = '%s';",userName);
         ArrayList<Billboard> billboards = new ArrayList<Billboard>();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getBillboard);
@@ -172,7 +172,7 @@ public class GetData {
      */
     public static Billboard getBillboard(String userName,String billboardName) throws SQLException {
         String billboardBackground,messageText,messageColour,infoText,infoColor,pictureUrl, pictureData;
-        String getBillboardData = String.format("SELECT * from billboards WHERE userName = '%s' AND billboardName = '%s'",userName,billboardName);
+        String getBillboardData = String.format("SELECT * from billboards WHERE userName = '%s' AND billboardName = '%s';",userName,billboardName);
         Billboard billboard = new Billboard(userName, billboardName);
         Connection connection = DBConnection.getInstance();
         Statement st = connection.createStatement();
@@ -256,7 +256,7 @@ public class GetData {
         Date date,time,duration,recurTime;
         String userName, billboardName;
         Connection connection = DBConnection.getInstance();
-        String getSuitableSchedule = String.format("SELECT* from schedules ");
+        String getSuitableSchedule = String.format("SELECT* from schedules; ");
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(getSuitableSchedule);
 
