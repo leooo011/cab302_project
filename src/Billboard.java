@@ -14,12 +14,12 @@ public class Billboard implements Serializable {
     private String userName;
     private String billboardName;
     private String billboardBackground;
-    private String messageText;
+    private String messageText="";
     private String messageColour;
-    private String infoText;
+    private String infoText="";
     private String infoColor;
-    private String pictureUrl;
-    private String pictureData;
+    private String pictureUrl="";
+    private String pictureData="";
     public Billboard(String userName, String billboardName){
         this.userName =userName;
         this.billboardName = billboardName;
