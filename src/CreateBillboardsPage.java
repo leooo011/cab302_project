@@ -288,11 +288,16 @@ public class CreateBillboardsPage extends JFrame implements ActionListener, Focu
                         objectInputStream = new ObjectInputStream(inputStream);
                         if (billboardAuthorName.isEmpty()) {
                             objectOutputStream.writeUTF("create billboard");
-                            //Author = LoginPage.getUserName();
-                            //objectOutputStream.writeObject();
+                            objectOutputStream.writeUTF(LoginPage.getSessionToken());
+                            objectOutputStream.writeObject(new CreateBillboardsRequest(LoginPage.getUserName(), nameText.getText(),
+                                    ColorParser.rgbTohex(backgroundButton.getBackground()), messageText.getText(),
+                                    ColorParser.rgbTohex(messageTextColorButton.getBackground()), pictureURLText.getText(),"",
+                                    inforText.getText(), ColorParser.rgbTohex(inforTextColorButton.getBackground())
+                                    ));
                         } else if (!billboardAuthorName.isEmpty()) {
                             if (!billboardBackground.equals(backgroundButton.getBackground())) {
                                 objectOutputStream.writeUTF("change billboard background");
+                                objectOutputStream.writeUTF(LoginPage.getSessionToken());
                                 objectOutputStream.writeUTF(billboardAuthorName);
                                 objectOutputStream.writeUTF(billboardName);
                                 objectOutputStream.writeUTF(ColorParser.rgbTohex(backgroundButton.getBackground()));
@@ -311,6 +316,7 @@ public class CreateBillboardsPage extends JFrame implements ActionListener, Focu
                                 objectOutputStream = new ObjectOutputStream(outputStream);
                                 objectInputStream = new ObjectInputStream(inputStream);
                                 objectOutputStream.writeUTF("change message text");
+                                objectOutputStream.writeUTF(LoginPage.getSessionToken());
                                 objectOutputStream.writeUTF(billboardAuthorName);
                                 objectOutputStream.writeUTF(billboardName);
                                 objectOutputStream.writeUTF(messageText.getText());
@@ -329,6 +335,7 @@ public class CreateBillboardsPage extends JFrame implements ActionListener, Focu
                                 objectOutputStream = new ObjectOutputStream(outputStream);
                                 objectInputStream = new ObjectInputStream(inputStream);
                                 objectOutputStream.writeUTF("change message colour");
+                                objectOutputStream.writeUTF(LoginPage.getSessionToken());
                                 objectOutputStream.writeUTF(billboardAuthorName);
                                 objectOutputStream.writeUTF(billboardName);
                                 objectOutputStream.writeUTF(ColorParser.rgbTohex(messageTextColorButton.getBackground()));
@@ -347,6 +354,7 @@ public class CreateBillboardsPage extends JFrame implements ActionListener, Focu
                                 objectOutputStream = new ObjectOutputStream(outputStream);
                                 objectInputStream = new ObjectInputStream(inputStream);
                                 objectOutputStream.writeUTF("change info text");
+                                objectOutputStream.writeUTF(LoginPage.getSessionToken());
                                 objectOutputStream.writeUTF(billboardAuthorName);
                                 objectOutputStream.writeUTF(billboardName);
                                 objectOutputStream.writeUTF(inforText.getText());
@@ -365,6 +373,7 @@ public class CreateBillboardsPage extends JFrame implements ActionListener, Focu
                                 objectOutputStream = new ObjectOutputStream(outputStream);
                                 objectInputStream = new ObjectInputStream(inputStream);
                                 objectOutputStream.writeUTF("change info colour");
+                                objectOutputStream.writeUTF(LoginPage.getSessionToken());
                                 objectOutputStream.writeUTF(billboardAuthorName);
                                 objectOutputStream.writeUTF(billboardName);
                                 objectOutputStream.writeUTF(ColorParser.rgbTohex(inforTextColorButton.getBackground()));
@@ -383,6 +392,7 @@ public class CreateBillboardsPage extends JFrame implements ActionListener, Focu
                                 objectOutputStream = new ObjectOutputStream(outputStream);
                                 objectInputStream = new ObjectInputStream(inputStream);
                                 objectOutputStream.writeUTF("change picture url");
+                                objectOutputStream.writeUTF(LoginPage.getSessionToken());
                                 objectOutputStream.writeUTF(billboardAuthorName);
                                 objectOutputStream.writeUTF(billboardName);
                                 objectOutputStream.writeUTF(pictureURLText.getText());
@@ -401,6 +411,7 @@ public class CreateBillboardsPage extends JFrame implements ActionListener, Focu
 //                                objectOutputStream = new ObjectOutputStream(outputStream);
 //                                objectInputStream = new ObjectInputStream(inputStream);
 //                                objectOutputStream.writeUTF("change picture data");
+    //                            objectOutputStream.writeUTF(LoginPage.getSessionToken());
 //                                objectOutputStream.writeUTF(billboardAuthorName);
 //                                objectOutputStream.writeUTF(billboardName);
 //                                objectOutputStream.writeUTF(...getText());
@@ -419,6 +430,7 @@ public class CreateBillboardsPage extends JFrame implements ActionListener, Focu
                             objectOutputStream = new ObjectOutputStream(outputStream);
                             objectInputStream = new ObjectInputStream(inputStream);
                             objectOutputStream.writeUTF("change billboard name");
+                            objectOutputStream.writeUTF(LoginPage.getSessionToken());
                             objectOutputStream.writeUTF(billboardAuthorName);
                             objectOutputStream.writeUTF(billboardName);
                             objectOutputStream.writeUTF(nameText.getText());
